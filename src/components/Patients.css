@@ -1,0 +1,162 @@
+/* Patients.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+  }
+  
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 40px auto;
+    max-width: 1000px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .card-title {
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  button {
+    padding: 8px 14px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  button.delete {
+    background-color: #dc3545;
+  }
+  
+  button.delete:hover {
+    background-color: #a71d2a;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  table th, table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+  }
+  
+  .error {
+    background-color: #f8d7da;
+    color: #842029;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+  }
+  
+  .success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+  }
+  
+  /* Modal Styles */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 500px;
+    max-width: 90%;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .modal-title {
+    font-size: 22px;
+    font-weight: bold;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #555;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group label {
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  
+  .form-group input,
+  .form-group select {
+    padding: 8px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background-color: #fff;
+    color: #333;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+
+  .tables {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    color: #000; /* Ensure table text is clearly visible */
+    background-color: #fff;
+  }

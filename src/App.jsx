@@ -1,0 +1,78 @@
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { createClient } from '@supabase/supabase-js';
+import './App.css';
+
+// Components
+import Dashboard from './components/Dashboard';
+import Doctors from './components/Doctors';
+import Patients from './components/Patients';
+import PharmaceuticalCompanies from './components/PharmaceuticalCompanies';
+import Drugs from './components/Drugs';
+import Pharmacy from './components/Pharmacy';
+import Prescriptions from './components/Prescriptions';
+// import PharmacyDrugs from './components/PharmacyDrugs';
+// import PharmacyContracts from './components/PharmacyContracts';
+
+// Initialize Supabase client
+const supabaseUrl = 'https://diiovqxucnpfgjfhdvca.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpaW92cXh1Y25wZmdqZmhkdmNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUzMjY4ODEsImV4cCI6MjA2MDkwMjg4MX0.uG3R2KXLE0llb3-mhxULr1PSKpUrUwuSKyxNvDBHoiU';
+export const supabase = createClient(supabaseUrl, supabaseKey);
+
+function App() {
+    return (
+      <Router>
+        <div className="app">
+          <nav className="navbar">
+            <div className="navbar-brand">Healthcare Management System</div>
+            <ul className="navbar-nav">
+              <li className="nav-item">
+                <Link to="/" className="nav-link">Dashboard</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/doctors" className="nav-link">Doctors</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/patients" className="nav-link">Patients</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/pharmaceutical-companies" className="nav-link">Pharmaceutical Companies</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/drugs" className="nav-link">Drugs</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/pharmacy" className="nav-link">Pharmacies</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/prescriptions" className="nav-link">Prescriptions</Link>
+              </li>
+              <li className="nav-item">
+                Pharmacy Drugs
+                {/* <Link to="/pharmacy-drugs" className="nav-link">Pharmacy Drugs</Link> */}
+              </li>
+              <li className="nav-item">
+                Pharmacy Contracts
+                {/* <Link to="/pharmacy-contracts" className="nav-link">Pharmacy Contracts</Link> */}
+              </li>
+            </ul>
+          </nav>
+          <div className="content">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/doctors" element={<Doctors />} />
+            <Route path="/patients" element={<Patients />} />
+            <Route path="/pharmaceutical-companies" element={<PharmaceuticalCompanies />} />
+            <Route path="/drugs" element={<Drugs />} />
+            <Route path="/pharmacy" element={<Pharmacy />} />
+            <Route path="/prescriptions" element={<Prescriptions />} />
+            {/* <Route path="/pharmacy-drugs" element={<PharmacyDrugs />} />
+            <Route path="/pharmacy-contracts" element={<PharmacyContracts />} /> */}
+          </Routes>
+        </div>
+      </div>
+    </Router>
+  );
+}
+
+export default App;

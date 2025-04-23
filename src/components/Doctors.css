@@ -1,0 +1,170 @@
+/* General styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Card layout */
+  .card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 30px auto;
+    max-width: 900px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .card-title {
+    font-size: 24px;
+    font-weight: 600;
+  }
+  
+  /* Button styles */
+  button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  button.delete {
+    background-color: #dc3545;
+  }
+  
+  button.delete:hover {
+    background-color: #a71d2a;
+  }
+  
+  /* Table styles */
+  .tables {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    color: #000; /* Ensure table text is clearly visible */
+    background-color: #fff;
+  }
+  
+  thead {
+    background-color: #343a40;
+    color: white;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border: 1px solid #dee2e6;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #f1f1f1;
+  }
+  
+  /* Error and success messages */
+  .error {
+    color: #dc3545;
+    background-color: #f8d7da;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  
+  .success {
+    color: #155724;
+    background-color: #d4edda;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  
+  /* Modal styles */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 95%;
+    position: relative;
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .modal-title {
+    font-size: 20px;
+    font-weight: 500;
+  }
+  
+  .close-button {
+    background: transparent;
+    font-size: 24px;
+    border: none;
+    color: #888;
+    cursor: pointer;
+  }
+  
+  .close-button:hover {
+    color: #000;
+  }
+  
+  /* Form styles */
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  
+  input {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    font-size: 14px;
+    background-color: #fff;
+    color: #212529;
+  }
+  
+  input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+  
