@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../App';
+import logo from '../assets/logo.png';
+import './Dashboard.css'; 
 
 function Dashboard() {
   const [counts, setCounts] = useState({
@@ -55,6 +57,10 @@ function Dashboard() {
 
   return (
     <div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent:'center', marginBottom: '20px' }}>
+        <img src={logo} alt="Nova Pharmacies Logo" style={{ height: '300px', marginRight: '15px' }} />
+        <h1 style={{ margin: 0 }}>NOVA PHARMACIES</h1>
+      </div>
       <h1>Dashboard</h1>
       <div className="dashboard-grid">
         <div className="dashboard-card">
@@ -85,4 +91,5 @@ function Dashboard() {
     </div>
   );
 }
+
 export default Dashboard;
