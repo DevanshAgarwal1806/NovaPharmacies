@@ -7,12 +7,16 @@ function Doctors() {
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showPatientLookupModal, setShowPatientLookupModal] = useState(false);
+  const [showPatientsResultModal, setShowPatientsResultModal] = useState(false);
   const [currentDoctor, setCurrentDoctor] = useState({
     daid: '',
     dname: '',
     speciality: '',
     years_of_experience: ''
   });
+  const [doctorNameLookup, setDoctorNameLookup] = useState('');
+  const [doctorPatients, setDoctorPatients] = useState([]);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -132,6 +136,51 @@ function Doctors() {
     }
   }
 
+  function handlePatientLookupClick() {
+    setDoctorNameLookup('');
+    setShowPatientLookupModal(true);
+  }
+
+  async function handlePatientLookupSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      // First, find the doctor's ID from the name
+      const { data: doctorData, error: doctorError } = await supabase
+        .from('doctor')
+        .select('daid')
+        .ilike('dname', `%${doctorNameLookup}%`);
+
+      if (doctorError) throw doctorError;
+      
+      if (!doctorData || doctorData.length === 0) {
+        setError('No doctor found with that name');
+        setTimeout(() => setError(''), 3000);
+        setLoading(false);
+        return;
+      }
+
+      // Now fetch all patients with this doctor as primary physician
+      const doctorIds = doctorData.map(doc => doc.daid);
+      const { data: patientData, error: patientError } = await supabase
+        .from('patient')
+        .select('*')
+        .in('primary_physician', doctorIds);
+
+      if (patientError) throw patientError;
+      
+      setDoctorPatients(patientData || []);
+      setShowPatientLookupModal(false);
+      setShowPatientsResultModal(true);
+    } catch (error) {
+      console.error('Error looking up patients:', error.message);
+      setError('Failed to lookup patients');
+      setTimeout(() => setError(''), 3000);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   if (loading) {
     return <div>Loading doctors...</div>;
   }
@@ -141,7 +190,10 @@ function Doctors() {
       <div className="card">
         <div className="card-header">
           <h1 className="card-title">Doctors</h1>
-          <button onClick={handleAddClick}>Add Doctor</button>
+          <div className="action-buttons">
+            <button onClick={handleAddClick}>Add Doctor</button>
+            <button onClick={handlePatientLookupClick}>Find Patients</button>
+          </div>
         </div>
 
         {error && <div className="error">{error}</div>}
@@ -298,6 +350,70 @@ function Doctors() {
               </div>
               <button type="submit">Update Doctor</button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Patient Lookup Modal */}
+      {showPatientLookupModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2 className="modal-title">Find Doctor's Patients</h2>
+              <button className="close-button" onClick={() => setShowPatientLookupModal(false)}>&times;</button>
+            </div>
+            <form onSubmit={handlePatientLookupSubmit}>
+              <div className="form-group">
+                <label htmlFor="doctor-name">Doctor Name</label>
+                <input
+                  type="text"
+                  id="doctor-name"
+                  value={doctorNameLookup}
+                  onChange={(e) => setDoctorNameLookup(e.target.value)}
+                  required
+                  placeholder="Enter doctor's name"
+                />
+              </div>
+              <button type="submit">Find Patients</button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Patients Result Modal */}
+      {showPatientsResultModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2 className="modal-title">Patients of Dr. {doctorNameLookup}</h2>
+              <button className="close-button" onClick={() => setShowPatientsResultModal(false)}>&times;</button>
+            </div>
+            <div className="patient-results">
+              {doctorPatients.length === 0 ? (
+                <p>No patients found for this doctor.</p>
+              ) : (
+                <table>
+                  <thead>
+                    <tr className="tables">
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Address</th>
+                      <th>Age</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {doctorPatients.map(patient => (
+                      <tr key={patient.paid} className="tables">
+                        <td>{patient.paid}</td>
+                        <td>{patient.pname}</td>
+                        <td>{patient.paddress}</td>
+                        <td>{patient.page}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
           </div>
         </div>
       )}

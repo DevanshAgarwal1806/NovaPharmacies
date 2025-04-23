@@ -11,6 +11,14 @@ function Prescriptions() {
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [showReportResultModal, setShowReportResultModal] = useState(false);
+  const [reportData, setReportData] = useState({
+    patient: '',
+    startDate: new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString().split('T')[0], // Default to 1 month ago
+    endDate: new Date().toISOString().split('T')[0], // Default to today
+    prescriptions: []
+  });
   const [currentPrescription, setCurrentPrescription] = useState({
     prescription_id: null,
     doctor: '',
@@ -22,6 +30,7 @@ function Prescriptions() {
   });
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [warningMessage, setWarningMessage] = useState('');
 
   useEffect(() => {
     fetchData();
@@ -122,6 +131,70 @@ function Prescriptions() {
     setShowEditModal(true);
   }
 
+  function handleReportClick() {
+    setReportData({
+      patient: '',
+      startDate: new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString().split('T')[0],
+      endDate: new Date().toISOString().split('T')[0],
+      prescriptions: []
+    });
+    setShowReportModal(true);
+  }
+
+  async function handleGenerateReport(e) {
+    e.preventDefault();
+    
+    if (!reportData.patient) {
+      setError('Please select a patient');
+      setTimeout(() => setError(''), 3000);
+      return;
+    }
+    
+    try {
+      // Find the selected patient's paid and pname
+      const selectedPatient = patients.find(p => p.paid === parseInt(reportData.patient));
+      
+      if (!selectedPatient) {
+        setError('Invalid patient selected');
+        return;
+      }
+      
+      // Query prescriptions for the selected patient within the date range
+      const { data, error: fetchError } = await supabase
+        .from('prescription_header')
+        .select(`
+          prescription_id,
+          prescription_date,
+          doctor (daid, dname),
+          patient (paid, pname),
+          pharmacy_name,
+          pharmacy_address,
+          prescription_detail (pharma_company, drug_name, quantity)
+        `)
+        .eq('patient', selectedPatient.paid)
+        .gte('prescription_date', reportData.startDate)
+        .lte('prescription_date', reportData.endDate)
+        .order('prescription_date', { ascending: false });
+        
+      if (fetchError) throw fetchError;
+      
+      // Update report data with fetched prescriptions
+      setReportData(prev => ({
+        ...prev,
+        prescriptions: data || []
+      }));
+      
+      // Close the filter modal and open the results modal
+      setShowReportModal(false);
+      setShowReportResultModal(true);
+      
+    } catch (error) {
+      console.error('Error generating report:', error.message);
+      setError('Failed to generate report: ' + error.message);
+      setTimeout(() => setError(''), 3000);
+    }
+  }
+
   async function handleDeleteClick(prescription) {
     if (window.confirm('Are you sure you want to delete this prescription?')) {
       try {
@@ -148,6 +221,44 @@ function Prescriptions() {
       [name]: name === 'doctor' || name === 'patient' 
         ? parseInt(value) || '' 
         : value
+    }));
+
+    // Clear warning when either doctor or patient changes
+    if (name === 'doctor' || name === 'patient') {
+      setWarningMessage('');
+    }
+
+    // Check if there's an existing prescription for this doctor-patient combination
+    if ((name === 'doctor' && currentPrescription.patient) || 
+        (name === 'patient' && currentPrescription.doctor)) {
+      
+      const doctorId = name === 'doctor' ? parseInt(value) : currentPrescription.doctor;
+      const patientId = name === 'patient' ? parseInt(value) : currentPrescription.patient;
+      
+      // Only check if both doctor and patient are selected
+      if (doctorId && patientId) {
+        const existingPrescription = prescriptions.find(
+          p => p.doctor.daid === doctorId && p.patient.paid === patientId
+        );
+        
+        if (existingPrescription) {
+          const doctorName = doctors.find(d => d.daid === doctorId)?.dname;
+          const patientName = patients.find(p => p.paid === patientId)?.pname;
+          
+          setWarningMessage(
+            `Warning: ${doctorName} already has a prescription for ${patientName}. ` +
+            `Saving will replace the existing prescription.`
+          );
+        }
+      }
+    }
+  }
+
+  function handleReportInputChange(e) {
+    const { name, value } = e.target;
+    setReportData(prev => ({
+      ...prev,
+      [name]: name === 'patient' ? parseInt(value) || '' : value
     }));
   }
 
@@ -278,6 +389,20 @@ function Prescriptions() {
     e.preventDefault();
     if (!validateForm()) return;
     
+    // Check for existing prescription for this doctor-patient combination
+    const existingPrescription = prescriptions.find(
+      p => p.doctor.daid === currentPrescription.doctor && 
+           p.patient.paid === currentPrescription.patient &&
+           p.prescription_id !== currentPrescription.prescription_id // Exclude current prescription if editing
+    );
+    
+    // If existing and not confirmed yet, ask for confirmation
+    if (existingPrescription && !window.confirm(
+      `A prescription already exists for this doctor and patient. The existing prescription will be replaced. Continue?`
+    )) {
+      return; // User canceled
+    }
+    
     try {
       // Prepare drugs data for the JSON parameter
       const drugsJson = currentPrescription.drugs.map(drug => ({
@@ -298,11 +423,16 @@ function Prescriptions() {
 
       if (error) throw error;
       
-      setSuccessMessage(isEdit ? 'Prescription updated successfully' : 'Prescription added successfully');
+      let message = isEdit ? 'Prescription updated successfully' : 'Prescription added successfully';
+      if (existingPrescription) {
+        message += '. Previous prescription for this doctor-patient combination has been replaced.';
+      }
+      
+      setSuccessMessage(message);
       fetchData();
       setShowAddModal(false);
       setShowEditModal(false);
-      setTimeout(() => setSuccessMessage(''), 3000);
+      setTimeout(() => setSuccessMessage(''), 5000);
     } catch (error) {
       console.error('Error saving prescription:', error.message);
       setError('Failed to save prescription: ' + error.message);
@@ -319,7 +449,10 @@ function Prescriptions() {
       <div className="card">
         <div className="card-header">
           <h1 className="card-title">Prescriptions</h1>
-          <button onClick={handleAddClick}>Add Prescription</button>
+          <div className="header-buttons">
+            <button onClick={handleAddClick}>Add Prescription</button>
+            <button onClick={handleReportClick}>Generate Patient Report</button>
+          </div>
         </div>
 
         {error && <div className="error">{error}</div>}
@@ -390,6 +523,9 @@ function Prescriptions() {
                 &times;
               </button>
             </div>
+            
+            {warningMessage && <div className="warning">{warningMessage}</div>}
+            
             <form onSubmit={(e) => handleSubmit(e, showEditModal)}>
               <div className="form-group">
                 <label htmlFor="doctor">Doctor</label>
@@ -506,6 +642,141 @@ function Prescriptions() {
                 {showAddModal ? 'Add Prescription' : 'Update Prescription'}
               </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Report Filter Modal */}
+      {showReportModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2 className="modal-title">Generate Patient Prescription Report</h2>
+              <button 
+                className="close-button" 
+                onClick={() => setShowReportModal(false)}
+              >
+                &times;
+              </button>
+            </div>
+            <form onSubmit={handleGenerateReport}>
+              <div className="form-group">
+                <label htmlFor="patient">Select Patient</label>
+                <select
+                  id="report-patient"
+                  name="patient"
+                  value={reportData.patient}
+                  onChange={handleReportInputChange}
+                  required
+                >
+                  <option value="">Select a patient</option>
+                  {patients.map(patient => (
+                    <option key={patient.paid} value={patient.paid}>
+                      {patient.pname}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="startDate">Start Date</label>
+                <input
+                  type="date"
+                  id="startDate"
+                  name="startDate"
+                  value={reportData.startDate}
+                  onChange={handleReportInputChange}
+                  required
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="endDate">End Date</label>
+                <input
+                  type="date"
+                  id="endDate"
+                  name="endDate"
+                  value={reportData.endDate}
+                  onChange={handleReportInputChange}
+                  required
+                />
+              </div>
+              
+              <button type="submit">Generate Report</button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Report Results Modal */}
+      {showReportResultModal && (
+        <div className="modal report-modal">
+          <div className="modal-content wide-modal">
+            <div className="modal-header">
+              <h2 className="modal-title">
+                Patient Prescription Report
+              </h2>
+              <button 
+                className="close-button" 
+                onClick={() => setShowReportResultModal(false)}
+              >
+                &times;
+              </button>
+            </div>
+            <div className="report-details">
+              <h3>
+                {patients.find(p => p.paid === reportData.patient)?.pname || 'Patient'} - 
+                Prescriptions from {new Date(reportData.startDate).toLocaleDateString()} to {new Date(reportData.endDate).toLocaleDateString()}
+              </h3>
+              
+              {reportData.prescriptions.length === 0 ? (
+                <p>No prescriptions found for this patient in the selected date range.</p>
+              ) : (
+                <table className="report-table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Doctor</th>
+                      <th>Pharmacy</th>
+                      <th>Drugs</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {reportData.prescriptions.map(prescription => (
+                      <tr key={prescription.prescription_id}>
+                        <td>{new Date(prescription.prescription_date).toLocaleDateString()}</td>
+                        <td>{prescription.doctor.dname}</td>  
+                        <td>{prescription.pharmacy_name} ({prescription.pharmacy_address})</td>
+                        <td>
+                          <ul className="drug-list">
+                            {prescription.prescription_detail.map((detail, idx) => (
+                              <li key={idx}>
+                                {detail.drug_name} ({detail.pharma_company}) - Qty: {detail.quantity}
+                              </li>
+                            ))}
+                          </ul>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+              
+              <div className="report-summary">
+                <p><strong>Total Prescriptions:</strong> {reportData.prescriptions.length}</p>
+                <p><strong>Total Drugs Prescribed:</strong> {
+                  reportData.prescriptions.reduce((total, prescription) => 
+                    total + prescription.prescription_detail.length, 0)
+                }</p>
+              </div>
+              
+              <button
+                onClick={() => setShowReportResultModal(false)}
+                className="close-report"
+              >
+                Close Report
+              </button>
+            </div>
           </div>
         </div>
       )}

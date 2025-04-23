@@ -11,8 +11,8 @@ import PharmaceuticalCompanies from './components/PharmaceuticalCompanies';
 import Drugs from './components/Drugs';
 import Pharmacy from './components/Pharmacy';
 import Prescriptions from './components/Prescriptions';
-// import PharmacyDrugs from './components/PharmacyDrugs';
-// import PharmacyContracts from './components/PharmacyContracts';
+import PharmacyDrugs from './components/PharmacyDrugs';
+import PharmacyContracts from './components/PharmacyContracts';
 
 // Initialize Supabase client
 const supabaseUrl = 'https://diiovqxucnpfgjfhdvca.supabase.co';
@@ -48,12 +48,10 @@ function App() {
                 <Link to="/prescriptions" className="nav-link">Prescriptions</Link>
               </li>
               <li className="nav-item">
-                Pharmacy Drugs
-                {/* <Link to="/pharmacy-drugs" className="nav-link">Pharmacy Drugs</Link> */}
+                <Link to="/pharmacy-drugs" className="nav-link">Pharmacy Drugs</Link>
               </li>
               <li className="nav-item">
-                Pharmacy Contracts
-                {/* <Link to="/pharmacy-contracts" className="nav-link">Pharmacy Contracts</Link> */}
+                <Link to="/pharmacy-contracts" className="nav-link">Pharmacy Contracts</Link>
               </li>
             </ul>
           </nav>
@@ -66,8 +64,8 @@ function App() {
             <Route path="/drugs" element={<Drugs />} />
             <Route path="/pharmacy" element={<Pharmacy />} />
             <Route path="/prescriptions" element={<Prescriptions />} />
-            {/* <Route path="/pharmacy-drugs" element={<PharmacyDrugs />} />
-            <Route path="/pharmacy-contracts" element={<PharmacyContracts />} /> */}
+            <Route path="/pharmacy-drugs" element={<PharmacyDrugs />} />
+            <Route path="/pharmacy-contracts" element={<PharmacyContracts />} />
           </Routes>
         </div>
       </div>

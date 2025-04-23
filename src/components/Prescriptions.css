@@ -156,3 +156,12 @@ td ul.drug-list::-webkit-scrollbar-thumb:hover {
   align-items: center;
   padding-bottom:80px;
 }
+
+.warning {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  border: 1px solid #ffeeba;
+}
