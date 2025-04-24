@@ -17,6 +17,7 @@ function Patients() {
   });
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [validationErrors, setValidationErrors] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -67,6 +68,7 @@ function Patients() {
       page: '',
       primary_physician: ''
     });
+    setValidationErrors({});
     setShowAddModal(true);
   }
 
@@ -78,6 +80,7 @@ function Patients() {
       page: patient.page,
       primary_physician: patient.primary_physician
     });
+    setValidationErrors({});
     setShowEditModal(true);
   }
 
@@ -100,16 +103,53 @@ function Patients() {
 
   function handleInputChange(e) {
     const { name, value } = e.target;
+    
+    // Clear validation error when field is updated
+    setValidationErrors(prev => ({
+      ...prev,
+      [name]: ''
+    }));
+
+    // Special handling for age to prevent negative values
+    if (name === 'page') {
+      // Only allow positive integers or empty string
+      const parsed = parseInt(value);
+      const newValue = value === '' ? '' : (isNaN(parsed) || parsed < 0) ? 0 : parsed;
+      
+      setCurrentPatient(prev => ({
+        ...prev,
+        [name]: newValue
+      }));
+      return;
+    }
+    
+    // Handle other fields
     setCurrentPatient(prev => ({
       ...prev,
-      [name]: name === 'paid' || name === 'page' || name === 'primary_physician' 
+      [name]: name === 'paid' || name === 'primary_physician' 
         ? parseInt(value) || '' 
         : value
     }));
   }
 
+  function validateForm() {
+    const errors = {};
+    
+    if (currentPatient.page === '' || currentPatient.page < 0) {
+      errors.page = 'Age must be a positive number';
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
+
   async function handleAddSubmit(e) {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
     try {
       const { error } = await supabase.rpc('add_patient', {
         p_paid: currentPatient.paid,
@@ -133,6 +173,11 @@ function Patients() {
 
   async function handleEditSubmit(e) {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
     try {
       const { error } = await supabase.rpc('update_patient', {
         p_paid: currentPatient.paid,
@@ -263,8 +308,10 @@ function Patients() {
                   name="page"
                   value={currentPatient.page}
                   onChange={handleInputChange}
+                  min="0"
                   required
                 />
+                {validationErrors.page && <div className="error-message">{validationErrors.page}</div>}
               </div>
               <div className="form-group">
                 <label htmlFor="primary_physician">Primary Physician</label>
@@ -338,8 +385,10 @@ function Patients() {
                 name="page"
                 value={currentPatient.page}
                 onChange={handleInputChange}
+                min="0"
                 required
               />
+              {validationErrors.page && <div className="error-message">{validationErrors.page}</div>}
             </div>
             <div className="form-group">
               <label htmlFor="edit-primary_physician">Primary Physician</label>

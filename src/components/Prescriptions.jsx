@@ -461,8 +461,8 @@ function Prescriptions() {
         <table>
           <thead>
             <tr className="tables">
-              <th>Doctor</th>
-              <th>Patient</th>
+              <th>Doctor (ID)</th>
+              <th>Patient (ID)</th>
               <th>Date</th>
               <th>Drugs</th>
               <th>Actions</th>
@@ -476,8 +476,8 @@ function Prescriptions() {
             ) : (
               prescriptions.map((prescription) => (
                 <tr key={prescription.prescription_id}>
-                  <td>{prescription.doctor.dname}</td>
-                  <td>{prescription.patient.pname}</td>
+                  <td>{prescription.doctor.dname} (ID: {prescription.doctor.daid})</td>
+                  <td>{prescription.patient.pname} (ID: {prescription.patient.paid})</td>
                   <td>{new Date(prescription.prescription_date).toLocaleDateString()}</td>
                   <td>
                     <ul className="drug-list">
@@ -524,7 +524,7 @@ function Prescriptions() {
             
             <form onSubmit={(e) => handleSubmit(e, showEditModal)}>
               <div className="form-group">
-                <label htmlFor="doctor">Doctor</label>
+                <label htmlFor="doctor">Doctor (ID)</label>
                 <select
                   id="doctor"
                   name="doctor"
@@ -535,14 +535,14 @@ function Prescriptions() {
                   <option value="">Select a doctor</option>
                   {doctors.map(doctor => (
                     <option key={doctor.daid} value={doctor.daid}>
-                      {doctor.daid} - {doctor.dname} ({doctor.speciality})
+                      {doctor.dname} (ID: {doctor.daid}) - {doctor.speciality}
                     </option>
                   ))}
                 </select>
               </div>
               
               <div className="form-group">
-                <label htmlFor="patient">Patient</label>
+                <label htmlFor="patient">Patient (ID)</label>
                 <select
                   id="patient"
                   name="patient"
@@ -553,7 +553,7 @@ function Prescriptions() {
                   <option value="">Select a patient</option>
                   {patients.map(patient => (
                     <option key={patient.paid} value={patient.paid}>
-                      {patient.pname}
+                      {patient.pname} (ID: {patient.paid})
                     </option>
                   ))}
                 </select>
@@ -668,7 +668,7 @@ function Prescriptions() {
                   <option value="">Select a patient</option>
                   {patients.map(patient => (
                     <option key={patient.paid} value={patient.paid}>
-                      {patient.pname}
+                      {patient.pname} (ID: {patient.paid})
                     </option>
                   ))}
                 </select>
@@ -721,7 +721,8 @@ function Prescriptions() {
             </div>
             <div className="report-details">
               <h3>
-                {patients.find(p => p.paid === reportData.patient)?.pname || 'Patient'} - 
+                {patients.find(p => p.paid === reportData.patient)?.pname || 'Patient'} 
+                (ID: {reportData.patient}) - 
                 Prescriptions from {new Date(reportData.startDate).toLocaleDateString()} to {new Date(reportData.endDate).toLocaleDateString()}
               </h3>
               
@@ -732,7 +733,7 @@ function Prescriptions() {
                   <thead>
                     <tr>
                       <th>Date</th>
-                      <th>Doctor</th>
+                      <th>Doctor (ID)</th>
                       <th>Drugs</th>
                     </tr>
                   </thead>
@@ -740,7 +741,7 @@ function Prescriptions() {
                     {reportData.prescriptions.map(prescription => (
                       <tr key={prescription.prescription_id}>
                         <td>{new Date(prescription.prescription_date).toLocaleDateString()}</td>
-                        <td>{prescription.doctor.dname}</td>  
+                        <td>{prescription.doctor.dname} (ID: {prescription.doctor.daid})</td>  
                         <td>
                           <ul className="drug-list">
                             {prescription.prescription_detail.map((detail, idx) => (
