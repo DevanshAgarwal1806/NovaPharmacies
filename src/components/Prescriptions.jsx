@@ -461,10 +461,8 @@ function Prescriptions() {
         <table>
           <thead>
             <tr className="tables">
-              <th>ID</th>
               <th>Doctor</th>
               <th>Patient</th>
-              <th>Pharmacy</th>
               <th>Date</th>
               <th>Drugs</th>
               <th>Actions</th>
@@ -473,15 +471,13 @@ function Prescriptions() {
           <tbody>
             {prescriptions.length === 0 ? (
               <tr>
-                <td colSpan="7">No prescriptions found</td>
+                <td colSpan="5">No prescriptions found</td>
               </tr>
             ) : (
               prescriptions.map((prescription) => (
                 <tr key={prescription.prescription_id}>
-                  <td>{prescription.prescription_id}</td>
                   <td>{prescription.doctor.dname}</td>
                   <td>{prescription.patient.pname}</td>
-                  <td>{prescription.pharmacy_name} {prescription.pharmacy_address && `(${prescription.pharmacy_address})`}</td>
                   <td>{new Date(prescription.prescription_date).toLocaleDateString()}</td>
                   <td>
                     <ul className="drug-list">
@@ -539,7 +535,7 @@ function Prescriptions() {
                   <option value="">Select a doctor</option>
                   {doctors.map(doctor => (
                     <option key={doctor.daid} value={doctor.daid}>
-                      {doctor.dname} ({doctor.speciality})
+                      {doctor.daid} - {doctor.dname} ({doctor.speciality})
                     </option>
                   ))}
                 </select>
@@ -737,7 +733,6 @@ function Prescriptions() {
                     <tr>
                       <th>Date</th>
                       <th>Doctor</th>
-                      <th>Pharmacy</th>
                       <th>Drugs</th>
                     </tr>
                   </thead>
@@ -746,7 +741,6 @@ function Prescriptions() {
                       <tr key={prescription.prescription_id}>
                         <td>{new Date(prescription.prescription_date).toLocaleDateString()}</td>
                         <td>{prescription.doctor.dname}</td>  
-                        <td>{prescription.pharmacy_name} ({prescription.pharmacy_address})</td>
                         <td>
                           <ul className="drug-list">
                             {prescription.prescription_detail.map((detail, idx) => (
