@@ -26,7 +26,7 @@ function Patients() {
     try {
       setLoading(true);
       
-      // Fetch patients with their doctor names
+      // Fetch patients with their doctor names and IDs
       const { data: patientData, error: patientError } = await supabase
         .from('patient')
         .select(`
@@ -35,7 +35,7 @@ function Patients() {
           paddress,
           page,
           primary_physician,
-          doctor:primary_physician (dname)
+          doctor:primary_physician (daid, dname)
         `)
         .order('paid');
 
@@ -192,7 +192,11 @@ function Patients() {
                   <td>{patient.pname}</td>
                   <td>{patient.paddress}</td>
                   <td>{patient.page}</td>
-                  <td>{patient.doctor ? patient.doctor.dname : 'N/A'}</td>
+                  <td>
+                    {patient.doctor 
+                      ? `${patient.doctor.dname} (ID: ${patient.doctor.daid})` 
+                      : 'N/A'}
+                  </td>
                   <td>
                     <button onClick={() => handleEditClick(patient)}>Edit</button>
                     <button 
@@ -274,7 +278,7 @@ function Patients() {
                   <option value="">Select a doctor</option>
                   {doctors.map(doctor => (
                     <option key={doctor.daid} value={doctor.daid}>
-                      {doctor.dname}
+                      {doctor.dname} (ID: {doctor.daid})
                     </option>
                   ))}
                 </select>
@@ -349,7 +353,7 @@ function Patients() {
                 <option value="">Select a doctor</option>
                 {doctors.map(doctor => (
                   <option key={doctor.daid} value={doctor.daid}>
-                    {doctor.dname}
+                    {doctor.dname} (ID: {doctor.daid})
                   </option>
                 ))}
               </select>
