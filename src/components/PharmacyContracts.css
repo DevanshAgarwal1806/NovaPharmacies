@@ -244,3 +244,9 @@
       width: 95%;
     }
   }
+.flex-box{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding-bottom: 30px;
+}

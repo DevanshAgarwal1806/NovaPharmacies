@@ -322,7 +322,7 @@ function PharmacyContract() {
                   <td>{formatDate(contract.end_date)}</td>
                   <td>{contract.content}</td>
                   <td>{contract.supervisor}</td>
-                  <td>
+                  <td className="flex-box">
                     <button onClick={() => handleEditClick(contract)}>Edit</button>
                     <button 
                       className="delete" 
