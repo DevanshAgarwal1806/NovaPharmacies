@@ -30,7 +30,7 @@ function Dashboard() {
           supabase.from('pharmaceutical_company').select('*', { count: 'exact', head: true }),
           supabase.from('drug').select('*', { count: 'exact', head: true }),
           supabase.from('pharmacy').select('*', { count: 'exact', head: true }),
-          supabase.from('prescription').select('*', { count: 'exact', head: true })
+          supabase.from('prescription_detail').select('*', { count: 'exact', head: true })
         ]);
 
         setCounts({

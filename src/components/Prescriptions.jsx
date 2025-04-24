@@ -7,7 +7,6 @@ function Prescriptions() {
   const [doctors, setDoctors] = useState([]);
   const [patients, setPatients] = useState([]);
   const [drugs, setDrugs] = useState([]);
-  const [pharmacies, setPharmacies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -23,8 +22,6 @@ function Prescriptions() {
     prescription_id: null,
     doctor: '',
     patient: '',
-    pharmacy_name: '',
-    pharmacy_address: '',
     prescription_date: new Date().toISOString().split('T')[0],
     drugs: [{ pharma_company: '', drug_name: '', quantity: 1 }]
   });
@@ -79,20 +76,11 @@ function Prescriptions() {
         .order('trade_name');
 
       if (drugError) throw drugError;
-
-      // Fetch pharmacies
-      const { data: pharmacyData, error: pharmacyError } = await supabase
-        .from('pharmacy')
-        .select('phname, phaddress')
-        .order('phname');
-
-      if (pharmacyError) throw pharmacyError;
       
       setPrescriptions(prescriptionData || []);
       setDoctors(doctorData || []);
       setPatients(patientData || []);
       setDrugs(drugData || []);
-      setPharmacies(pharmacyData || []);
     } catch (error) {
       console.error('Error fetching data:', error.message);
       setError('Failed to fetch data: ' + error.message);
@@ -106,8 +94,6 @@ function Prescriptions() {
       prescription_id: null,
       doctor: '',
       patient: '',
-      pharmacy_name: '',
-      pharmacy_address: '',
       prescription_date: new Date().toISOString().split('T')[0],
       drugs: [{ pharma_company: '', drug_name: '', quantity: 1 }]
     });
@@ -119,8 +105,6 @@ function Prescriptions() {
       prescription_id: prescription.prescription_id,
       doctor: prescription.doctor.daid,
       patient: prescription.patient.paid,
-      pharmacy_name: prescription.pharmacy_name,
-      pharmacy_address: prescription.pharmacy_address,
       prescription_date: prescription.prescription_date,
       drugs: prescription.prescription_detail.map(detail => ({
         pharma_company: detail.pharma_company,
@@ -319,30 +303,6 @@ function Prescriptions() {
     }
   }
 
-  function handlePharmacyChange(e) {
-    const value = e.target.value;
-    if (value) {
-      // Find the first occurrence of hyphen to split properly
-      const firstHyphenIndex = value.indexOf('-');
-      if (firstHyphenIndex !== -1) {
-        const pharmacy_name = value.substring(0, firstHyphenIndex);
-        const pharmacy_address = value.substring(firstHyphenIndex + 1);
-        
-        setCurrentPrescription(prev => ({
-          ...prev,
-          pharmacy_name,
-          pharmacy_address
-        }));
-      }
-    } else {
-      setCurrentPrescription(prev => ({
-        ...prev,
-        pharmacy_name: '',
-        pharmacy_address: ''
-      }));
-    }
-  }
-
   function validateForm() {
     if (!currentPrescription.doctor) {
       setError('Please select a doctor');
@@ -350,10 +310,6 @@ function Prescriptions() {
     }
     if (!currentPrescription.patient) {
       setError('Please select a patient');
-      return false;
-    }
-    if (!currentPrescription.pharmacy_name || !currentPrescription.pharmacy_address) {
-      setError('Please select a pharmacy');
       return false;
     }
     if (!currentPrescription.prescription_date) {
@@ -415,8 +371,8 @@ function Prescriptions() {
       const { data, error } = await supabase.rpc('add_prescription', {
         p_doctor: currentPrescription.doctor,
         p_patient: currentPrescription.patient,
-        p_pharmacy_name: currentPrescription.pharmacy_name,
-        p_pharmacy_address: currentPrescription.pharmacy_address,
+        p_pharmacy_name: null, // Pass null for pharmacy name
+        p_pharmacy_address: null, // Pass null for pharmacy address
         p_date: currentPrescription.prescription_date,
         p_drugs: drugsJson
       });
@@ -554,24 +510,6 @@ function Prescriptions() {
                   {patients.map(patient => (
                     <option key={patient.paid} value={patient.paid}>
                       {patient.pname} (ID: {patient.paid})
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="pharmacy">Pharmacy</label>
-                <select
-                  id="pharmacy"
-                  name="pharmacy"
-                  value={`${currentPrescription.pharmacy_name}-${currentPrescription.pharmacy_address}`}
-                  onChange={handlePharmacyChange}
-                  required
-                >
-                  <option value="">Select a pharmacy</option>
-                  {pharmacies.map((pharmacy, index) => (
-                    <option key={index} value={`${pharmacy.phname}-${pharmacy.phaddress}`}>
-                      {pharmacy.phname} ({pharmacy.phaddress})
                     </option>
                   ))}
                 </select>
