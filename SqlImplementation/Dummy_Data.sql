@@ -1,0 +1,87 @@
+INSERT INTO DOCTOR VALUES (1, 'Dr. Smith', 'Cardiology', 10);
+INSERT INTO DOCTOR VALUES (2, 'Dr. Adams', 'Neurology', 8);
+INSERT INTO DOCTOR VALUES (3, 'Dr. Clark', 'Orthopedics', 12);
+INSERT INTO DOCTOR VALUES (4, 'Dr. Lee', 'Dermatology', 6);
+INSERT INTO DOCTOR VALUES (5, 'Dr. Khan', 'Pediatrics', 9);
+INSERT INTO DOCTOR VALUES (6, 'Dr. Jones', 'Oncology', 15);
+INSERT INTO DOCTOR VALUES (7, 'Dr. Ray', 'Psychiatry', 7);
+INSERT INTO DOCTOR VALUES (8, 'Dr. Mehta', 'ENT', 11);
+INSERT INTO DOCTOR VALUES (9, 'Dr. Kumar', 'Urology', 5);
+INSERT INTO DOCTOR VALUES (10, 'Dr. Patel', 'Gynecology', 13);
+
+INSERT INTO PATIENT VALUES (101, 'Alice', '123 Park Ave', 34, 1);
+INSERT INTO PATIENT VALUES (102, 'Bob', '456 Elm St', 29, 2);
+INSERT INTO PATIENT VALUES (103, 'Charlie', '789 Oak Rd', 42, 3);
+INSERT INTO PATIENT VALUES (104, 'David', '321 Maple Ln', 36, 4);
+INSERT INTO PATIENT VALUES (105, 'Eva', '654 Pine Blvd', 27, 5);
+INSERT INTO PATIENT VALUES (106, 'Frank', '876 Cedar Dr', 39, 6);
+INSERT INTO PATIENT VALUES (107, 'Grace', '213 Birch Way', 30, 7);
+INSERT INTO PATIENT VALUES (108, 'Hank', '432 Walnut Cir', 50, 8);
+INSERT INTO PATIENT VALUES (109, 'Ivy', '567 Spruce Ct', 45, 9);
+INSERT INTO PATIENT VALUES (110, 'Jack', '890 Willow Pl', 38, 10);
+
+INSERT INTO PHARMACEUTICAL_COMPANY VALUES ('PharmaCorp', '111-222-3333');
+INSERT INTO PHARMACEUTICAL_COMPANY VALUES ('MediCure', '222-333-4444');
+INSERT INTO PHARMACEUTICAL_COMPANY VALUES ('LifeLine', '333-444-5555');
+INSERT INTO PHARMACEUTICAL_COMPANY VALUES ('CureMax', '444-555-6666');
+INSERT INTO PHARMACEUTICAL_COMPANY VALUES ('HealPlus', '555-666-7777');
+INSERT INTO PHARMACEUTICAL_COMPANY VALUES ('Wellness Inc', '666-777-8888');
+INSERT INTO PHARMACEUTICAL_COMPANY VALUES ('BioMed', '777-888-9999');
+INSERT INTO PHARMACEUTICAL_COMPANY VALUES ('HealthFirst', '888-999-0000');
+INSERT INTO PHARMACEUTICAL_COMPANY VALUES ('GoodHealth', '999-000-1111');
+INSERT INTO PHARMACEUTICAL_COMPANY VALUES ('NeoPharm', '000-111-2222');
+
+INSERT INTO PHARMACY VALUES ('CityPharma', 'Downtown Street', '123-456-7890');
+INSERT INTO PHARMACY VALUES ('WellCare', 'Main Avenue', '234-567-8901');
+INSERT INTO PHARMACY VALUES ('HealthHub', 'Market Road', '345-678-9012');
+INSERT INTO PHARMACY VALUES ('MediStore', 'Park Lane', '456-789-0123');
+INSERT INTO PHARMACY VALUES ('PharmaOne', 'Central Plaza', '567-890-1234');
+INSERT INTO PHARMACY VALUES ('QuickMeds', 'East Blvd', '678-901-2345');
+INSERT INTO PHARMACY VALUES ('Medix', 'North Street', '789-012-3456');
+INSERT INTO PHARMACY VALUES ('TrustPharma', 'Hill View', '890-123-4567');
+INSERT INTO PHARMACY VALUES ('CarePoint', 'River Side', '901-234-5678');
+INSERT INTO PHARMACY VALUES ('HappyMeds', 'Sunshine Park', '012-345-6789');
+
+INSERT INTO DRUG VALUES ('PharmaCorp', 'Atenolol', 'C14H22N2O3');
+INSERT INTO DRUG VALUES ('MediCure', 'Ibuprofen', 'C13H18O2');
+INSERT INTO DRUG VALUES ('LifeLine', 'Paracetamol', 'C8H9NO2');
+INSERT INTO DRUG VALUES ('CureMax', 'Amoxicillin', 'C16H19N3O5S');
+INSERT INTO DRUG VALUES ('HealPlus', 'Metformin', 'C4H11N5');
+INSERT INTO DRUG VALUES ('Wellness Inc', 'Lisinopril', 'C21H31N3O5');
+INSERT INTO DRUG VALUES ('BioMed', 'Omeprazole', 'C17H19N3O3S');
+INSERT INTO DRUG VALUES ('HealthFirst', 'Simvastatin', 'C25H38O5');
+INSERT INTO DRUG VALUES ('GoodHealth', 'Losartan', 'C22H23ClN6O');
+INSERT INTO DRUG VALUES ('NeoPharm', 'Hydrochlorothiazide', 'C7H8ClN3O4S2');
+
+INSERT INTO PRESCRIPTION VALUES (1, 101, 'PharmaCorp', 'Atenolol', DATE '2025-04-01', 30);
+INSERT INTO PRESCRIPTION VALUES (1, 101, 'MediCure', 'Ibuprofen', DATE '2025-04-01', 15);
+INSERT INTO PRESCRIPTION VALUES (2, 102, 'LifeLine', 'Paracetamol', DATE '2025-04-03', 20);
+INSERT INTO PRESCRIPTION VALUES (3, 103, 'CureMax', 'Amoxicillin', DATE '2025-04-04', 10);
+INSERT INTO PRESCRIPTION VALUES (4, 104, 'HealPlus', 'Metformin', DATE '2025-04-05', 25);
+INSERT INTO PRESCRIPTION VALUES (5, 105, 'Wellness Inc', 'Lisinopril', DATE '2025-04-06', 18);
+INSERT INTO PRESCRIPTION VALUES (6, 106, 'BioMed', 'Omeprazole', DATE '2025-04-07', 14);
+INSERT INTO PRESCRIPTION VALUES (7, 107, 'HealthFirst', 'Simvastatin', DATE '2025-04-08', 12);
+INSERT INTO PRESCRIPTION VALUES (8, 108, 'GoodHealth', 'Losartan', DATE '2025-04-09', 10);
+INSERT INTO PRESCRIPTION VALUES (9, 109, 'NeoPharm', 'Hydrochlorothiazide', DATE '2025-04-10', 16);
+
+INSERT INTO PHARMACY_DRUGS VALUES ('CityPharma', 'Downtown Street', 'PharmaCorp', 'Atenolol', 100);
+INSERT INTO PHARMACY_DRUGS VALUES ('CityPharma', 'Downtown Street', 'MediCure', 'Ibuprofen', 50);
+INSERT INTO PHARMACY_DRUGS VALUES ('WellCare', 'Main Avenue', 'LifeLine', 'Paracetamol', 40);
+INSERT INTO PHARMACY_DRUGS VALUES ('HealthHub', 'Market Road', 'CureMax', 'Amoxicillin', 60);
+INSERT INTO PHARMACY_DRUGS VALUES ('MediStore', 'Park Lane', 'HealPlus', 'Metformin', 30);
+INSERT INTO PHARMACY_DRUGS VALUES ('PharmaOne', 'Central Plaza', 'Wellness Inc', 'Lisinopril', 80);
+INSERT INTO PHARMACY_DRUGS VALUES ('QuickMeds', 'East Blvd', 'BioMed', 'Omeprazole', 90);
+INSERT INTO PHARMACY_DRUGS VALUES ('Medix', 'North Street', 'HealthFirst', 'Simvastatin', 85);
+INSERT INTO PHARMACY_DRUGS VALUES ('TrustPharma', 'Hill View', 'GoodHealth', 'Losartan', 95);
+INSERT INTO PHARMACY_DRUGS VALUES ('CarePoint', 'River Side', 'NeoPharm', 'Hydrochlorothiazide', 70);
+
+INSERT INTO PHARMACY_CONTRACT VALUES ('CityPharma', 'Downtown Street', 'PharmaCorp', DATE '2024-01-01', DATE '2026-01-01', 'Exclusive supply', 'Mr. Brown');
+INSERT INTO PHARMACY_CONTRACT VALUES ('CityPharma', 'Downtown Street', 'MediCure', DATE '2024-02-01', DATE '2026-02-01', 'Joint collaboration', 'Ms. Grey');
+INSERT INTO PHARMACY_CONTRACT VALUES ('WellCare', 'Main Avenue', 'LifeLine', DATE '2024-03-01', DATE '2026-03-01', 'Distribution contract', 'Mr. White');
+INSERT INTO PHARMACY_CONTRACT VALUES ('HealthHub', 'Market Road', 'CureMax', DATE '2024-04-01', DATE '2026-04-01', 'Annual supply', 'Ms. Black');
+INSERT INTO PHARMACY_CONTRACT VALUES ('MediStore', 'Park Lane', 'HealPlus', DATE '2024-05-01', DATE '2026-05-01', 'Bulk order', 'Dr. Stone');
+INSERT INTO PHARMACY_CONTRACT VALUES ('PharmaOne', 'Central Plaza', 'Wellness Inc', DATE '2024-06-01', DATE '2026-06-01', 'Exclusive deal', 'Mr. Green');
+INSERT INTO PHARMACY_CONTRACT VALUES ('QuickMeds', 'East Blvd', 'BioMed', DATE '2024-07-01', DATE '2026-07-01', 'National agreement', 'Ms. Violet');
+INSERT INTO PHARMACY_CONTRACT VALUES ('Medix', 'North Street', 'HealthFirst', DATE '2024-08-01', DATE '2026-08-01', 'Joint distribution', 'Mr. Blue');
+INSERT INTO PHARMACY_CONTRACT VALUES ('TrustPharma', 'Hill View', 'GoodHealth', DATE '2024-09-01', DATE '2026-09-01', 'Citywide coverage', 'Dr. Red');
+INSERT INTO PHARMACY_CONTRACT VALUES ('CarePoint', 'River Side', 'NeoPharm', DATE '2024-10-01', DATE '2026-10-01', 'Biannual review', 'Mrs. Pink');

@@ -1,0 +1,103 @@
+4. get_drug_details (pharmaceutical_company_name VARCHAR2)
+7. get_patients_list (p_doctor_id IN NUMBER)
+3. get_prescription (patient_id IN NUMBER, presc_date IN DATE)
+6. pharmacy_company_contract (pharmacy_name IN VARCHAR2, pharmacy_address IN VARCHAR2, pharmaceutical_company_name IN VARCHAR2)
+5. pharmacy_drug_stock (pharmacy_name IN VARCHAR2, pharmacy_address IN VARCHAR2)
+
+2. report_prescriptions (patient_id IN NUMBER, prescription_start_date IN DATE, prescription_end_date IN DATE)
+exec report_prescriptions(101, TO_DATE('01-04-2025', 'DD-MM-YYYY'), TO_DATE('01-04-2025'));
+
+1. Data Manipulation:
+Doctor:
+add_doctor (
+    p_daid INT, p_dname VARCHAR2, p_speciality VARCHAR2, p_years_of_experience INT
+)
+delete_doctor (
+    p_daid INT
+)
+update_doctor (
+    p_daid INT, p_dname VARCHAR2, p_speciality VARCHAR2, p_years_of_experience INT
+)
+
+Drug:
+add_drug (
+    p_phcompany VARCHAR2, p_trade_name VARCHAR2, p_formula VARCHAR2
+)
+delete_drug (
+    p_phcompany VARCHAR2, p_trade_name VARCHAR2
+)
+update_drug (
+    p_phcompany VARCHAR2, p_trade_name VARCHAR2, p_formula VARCHAR2
+)
+
+Patient:
+add_patient (
+    p_paid INT, p_pname VARCHAR2, p_paddress VARCHAR2, p_page INT, p_physician INT
+)
+delete_patient (
+    p_paid INT
+)
+update_patient (
+    p_paid INT, p_pname VARCHAR2, p_paddress VARCHAR2, p_page INT, p_physician INT
+)
+
+PharmaCompany:
+add_pharmaceutical_company (
+    p_name VARCHAR2, p_phone VARCHAR2
+)
+delete_pharmaceutical_company (
+    p_name VARCHAR2
+)
+update_pharmaceutical_company (
+    p_name VARCHAR2, p_phone VARCHAR2
+)
+
+Pharmacy:
+add_pharmacy (
+    p_name VARCHAR2, p_address VARCHAR2, p_phone VARCHAR2
+)
+delete_pharmacy (
+    p_name VARCHAR2, p_address VARCHAR2
+)
+update_pharmacy (
+    p_name VARCHAR2, p_address VARCHAR2, p_phone VARCHAR2
+)
+
+PharmacyContract:
+add_pharmacy_contract (
+    p_name VARCHAR2, p_address VARCHAR2, p_company VARCHAR2,
+    p_start DATE, p_end DATE, p_content VARCHAR2, p_supervisor VARCHAR2
+)
+delete_pharmacy_contract (
+    p_name VARCHAR2, p_address VARCHAR2, p_company VARCHAR2
+)
+update_pharmacy_contract (
+    p_name VARCHAR2, p_address VARCHAR2, p_company VARCHAR2,
+    p_start DATE, p_end DATE, p_content VARCHAR2, p_supervisor VARCHAR2
+)
+
+PharmacyDrug:
+add_pharmacy_drug (
+    p_name VARCHAR2, p_address VARCHAR2, p_company VARCHAR2, p_drug VARCHAR2, p_price INT
+)
+delete_pharmacy_drug (
+    p_name VARCHAR2, p_address VARCHAR2, p_company VARCHAR2, p_drug VARCHAR2
+)
+update_pharmacy_drug (
+    p_name VARCHAR2, p_address VARCHAR2, p_company VARCHAR2, p_drug VARCHAR2, p_price INT
+)
+
+Prescription:
+add_prescription (
+    p_doctor INT, p_patient INT, p_company VARCHAR2, p_drug VARCHAR2,
+    p_date DATE, p_quantity INT
+)
+delete_prescription (
+    p_doctor INT, p_patient INT, p_company VARCHAR2, p_drug VARCHAR2
+)
+update_prescription (
+    p_doctor INT, p_patient INT, p_company VARCHAR2, p_drug VARCHAR2,
+    p_date DATE, p_quantity INT
+)
+
+
